@@ -1,0 +1,24 @@
+{
+  "name": "encrypted-time-series",
+  "version": "1.0.0",
+  "description": "backend service to generate and send encrypted message over a socket. Further it listens, decrypts and store the sent messages in DB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nico6101/Encrypted-Time-Series.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nico6101/Encrypted-Time-Series/issues"
+  },
+  "homepage": "https://github.com/Nico6101/Encrypted-Time-Series#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.3.2",
+    "socket.io-client": "^4.3.2"
+  }
+}
