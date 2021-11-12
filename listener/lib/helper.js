@@ -12,20 +12,48 @@ const decryptMessage = (hash) => {
     return decrpyted;
 };
 
+const validateMessage = (message) => {
+    message = JSON.parse(message);
+    let originalMessage = { name: message.name, origin: message.origin, destination: message.destination };
+    let shaHash = crypto.createHash('sha256').update(JSON.stringify(originalMessage)).digest('hex');
+    if (shaHash === message.secret_key) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 const decryptPayload = (payload) => {
+    try {
+        let payloadArr = payload.split('|');
+        let decryptedPayload = "";
+        let dataIntegrity = true;
+        payloadArr.forEach(message => {
+            let decryptedMessage = decryptMessage(message);
+            let isMessageValid = validateMessage(decryptedMessage);
+            if (!isMessageValid) dataIntegrity = false;
+            decryptedPayload = decryptedPayload + decryptedMessage + '|';
+        });
 
-    let payloadArr = payload.split('|');
-    let decryptedPayload = "";
-    payloadArr.forEach(message => {
-        let decryptedMessage = decryptMessage(message);
-        decryptedPayload = decryptedPayload + decryptedMessage + '|';
-    });
+        if (!dataIntegrity) {
+            throw new Error("Data integrity failed");
+        }
+        else {
+            console.log("Data is valid");
+        }
+        decryptedPayload = decryptedPayload.substring(0, decryptedPayload.length - 1); // to remove the last pipe ('|') symbol
 
-    decryptedPayload = decryptedPayload.substring(0, decryptedPayload.length - 1); // to remove the last pipe ('|') symbol
+        console.log(decryptedPayload);
 
-    console.log(decryptedPayload);
+        // TODO: formatting data to be stored in DB
 
-    return decryptedPayload;
+        return decryptedPayload;
+    }
+    catch (err) {
+        console.log(err);
+        throw err;
+    }
 }
 
 module.exports = {
