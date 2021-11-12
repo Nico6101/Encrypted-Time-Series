@@ -4,14 +4,13 @@ const socket = io("http://localhost:3000");
 
 let payload = helper.generateEncryptedPayload();
 
-socket.emit("hello", payload, (response) => {
-    console.log('client sent hello event status : ', response.status);
-});
-
 socket.on('connect', () => {
     console.log('on connect');
     console.log(socket.id);
     console.log(socket.connected);
+    socket.emit("encryptedMessage", payload, (response) => {
+        console.log('client sent hello event status : ', response.status);
+    });
 });
 
 socket.on("disconnect", () => {

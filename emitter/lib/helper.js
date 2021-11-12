@@ -8,7 +8,7 @@ const encryptMessage = () => {
         destination: data.cities[Math.floor(Math.random() * data.cities.length)]
     }
 
-    let originalMessageWithHash = Object.assign({}, originalMessage, crypto.createHash('sha256').update(JSON.stringify(originalMessage)));
+    let originalMessageWithHash = Object.assign({}, originalMessage, { secret_key: crypto.createHash('sha256').update(JSON.stringify(originalMessage)).digest('hex') });
 
     const algorithm = 'aes-256-ctr';
     const secretKey = 'PdSgVkYp3s6v9y$B&E)H+MbQeThWmZq4';
@@ -16,7 +16,7 @@ const encryptMessage = () => {
 
     let cipher = crypto.createCipheriv(algorithm, secretKey, iv);
 
-    let encryptedMessage = Buffer.concat([cipher.update(JSON.stringify(originalMessageWithHash)), cipher.final()]);
+    let encryptedMessage = Buffer.concat([cipher.update(JSON.stringify(originalMessageWithHash)), cipher.final()]).toString('hex');
 
     return encryptedMessage;
 }
@@ -26,7 +26,7 @@ const generateEncryptedPayload = () => {
     let max = 499;
     let random = Math.floor((Math.random() * (max - min) + min));
     let encryptedPayload = "";
-    for(let i = 0; i< random; i++) {
+    for (let i = 0; i < random; i++) {
         encryptedPayload += encryptMessage() + '|';
     }
     encryptedPayload = encryptedPayload.substring(0, encryptedPayload.length - 1); // to remove the last pipe ('|') symbol
