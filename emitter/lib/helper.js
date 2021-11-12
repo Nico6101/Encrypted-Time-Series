@@ -11,9 +11,10 @@ const encryptMessage = () => {
     let originalMessageWithHash = Object.assign({}, originalMessage, crypto.createHash('sha256').update(JSON.stringify(originalMessage)));
 
     const algorithm = 'aes-256-ctr';
-    const secretKey = 'smartjouleskey';
+    const secretKey = 'PdSgVkYp3s6v9y$B&E)H+MbQeThWmZq4';
+    const iv = 'smartjoulesiv123';
 
-    let cipher = crypto.createCipheriv(algorithm, secretKey);
+    let cipher = crypto.createCipheriv(algorithm, secretKey, iv);
 
     let encryptedMessage = Buffer.concat([cipher.update(JSON.stringify(originalMessageWithHash)), cipher.final()]);
 
